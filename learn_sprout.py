@@ -130,7 +130,7 @@ def print_chains(chains):
 
 if __name__=="__main__":
   parser = OptionParser()
-  parser.add_option("-f", "--file", dest="dict_file", help="Dictionary file containing valid words.", metavar="FILE")
+  parser.add_option("-d", "--dict", dest="dict_file", help="Dictionary file containing valid words.", metavar="FILE")
   parser.add_option("-w", "--word", dest="starting_word", help="Word to derive linguistic chain from.", metavar="WORD")
   
   (options, args) = parser.parse_args()

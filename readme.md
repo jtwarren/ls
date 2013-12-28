@@ -15,18 +15,19 @@ Usage: learn_sprout.py [options]
 
 Options:
   -h, --help            show this help message and exit
-  -f FILE, --file=FILE  Dictionary file containing valid words.
+  -d FILE, --dict=FILE  Dictionary file containing valid words.
   -w WORD, --word=WORD  Word to derive linguistic chain from.
 ```
 
-Example command: `learn_sprout.py -f words`
+Example command: `./learn_sprout.py --dict=words  --word=gnostology`
+
 Example output:
 ``` console
-abranchiate => branchiate => branchiae => branchia => branchi => branch => ranch => rach => ach => ah => h
-abranchiate => branchiate => branchiae => branchia => branchi => branch => ranch => rach => ach => ah => a
+gnostology => nostology => nosology => noology => oology => ology => logy => loy => ly => y
+gnostology => nostology => nosology => noology => oology => ology => logy => loy => ly => l
 ...
-abranchiate => branchiate => branchiae => branchia => branchi => branch => brach => bach => bac => ba => a
-abranchiate => branchiate => branchiae => branchia => branchi => branch => brach => bach => bac => ba => b
+gnostology => nostology => nosology => noology => oology => ology => logy => log => lo => o
+gnostology => nostology => nosology => noology => oology => ology => logy => log => lo => l
 ```
 
 ### Step 3
