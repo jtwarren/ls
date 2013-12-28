@@ -1,10 +1,6 @@
 #! /usr/bin/env python
-
 from optparse import OptionParser
-
 from linguistic import LinguisticChains
-
-import sys
 
 """Get all words from a file."""
 def words_from_file(filename):

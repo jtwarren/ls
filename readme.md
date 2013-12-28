@@ -1,5 +1,5 @@
 # LearnSprout coding challenge
-The LearnSprout coding challenge consists of 3 parts.  Part 1 is 'show and tell'.  I describe one of my most recent projects, LearnTo.  In part 2, I describe the linguistic chain coding challenge and command line interface.  For part 3, I describe the API interface to the linguistic chain program.  I decided to put the API into its own part for readability and isolation.
+The LearnSprout coding challenge consists of 3 parts.  Part 1 is 'show and tell'.  I describe one of my most recent projects, LearnTo.  In part 2, I describe the linguistic chain coding challenge and command line interface.  For part 3, I describe the API interface to the linguistic chain program.  I decided to break the API into its own part for readability and isolation.
 
 ## Part 1
 Last summer my friend Vishnu, a medical student at UCSD, decided to learn programming like many others his age. He wanted to learn programming to broaden his horizons and bring his own ideas to life through apps and websites. Excited by his new intellectual venture, Vishnu tried using a variety of different resources - CodeAcademy, One Month Rails, Khan Academy, and many others. However, none of them worked. Time and again, he would get stuck, and frustrated as he tried to parse through challenging new material without any help from others. Unlike how he learned throughout his life, this time he didn't have anyone to answer his questions, point him to the right resources, and check his understanding. In seeing this, I realized that Vishnu is representative of a large group of people who don't learn best on their own and are being left behind by online education. He, like so many of us, thrives when he has someone there to help him understand the beauty and the intuition behind what it is he is learning. Learning alone, with no one there to communicate with, is unnatural, difficult, and ineffective for him.
@@ -21,7 +21,6 @@ Options:
   -h, --help            show this help message and exit
   -d FILE, --dict=FILE  Dictionary file containing valid words.
   -w WORD, --word=WORD  Word to derive linguistic chain from.
-
 $ ./learn_sprout.py --dict=words  --word=gnostology
 gnostology => nostology => nosology => noology => oology => ology => logy => loy => ly => y
 gnostology => nostology => nosology => noology => oology => ology => logy => loy => ly => l
@@ -42,21 +41,70 @@ There are several pieces of the program to look at when considering runtime perf
 The runtime for computing a single word still involves reading in the set of words.  This is a fixed cost though, and only happens once per instantiation of the class.  At that point, the worst case runtime is then O(k!) where k is the number of letters in the word.  This is worst case, assuming every subword of every subword and the word iteself is a valid word.  The more general case will result in a runtime of O(c*l) where l is the length of the longest chain and c is the number of chains of that lenght.  Consider 'gnostology' and the unix dictionary.  This results in 12 chains of length 10, seen above.
 
 ### Assumptions and optimizations
-For this challenge, I made several assumptions.  First, that the entire dictionary could be loaded into memory (tested with unix dictionary with 235,886 words).  This is a reasonable assumption considering the unix dictionary, when loaded into a python set, is 8.0 Megabytes.  
+For this challenge, I made several assumptions.  First, that the entire dictionary could be loaded into memory (tested with unix dictionary with 235,886 words).  This is a reasonable assumption considering the unix dictionary, when loaded into a python set, is 8.0 Megabytes according to python's `__sizeof__` method.
 
 There are various optimizations that I did not make.  This includes using information about the length of seen chains or other heuristics for decision making.  For example, if you have already seen a chain of length 7, there would be no need to check a word of length 5.  While this is an easy change, I decided to leave it out for readablity.
 
 While I made these assumptions and optimizations (of lack of), I would be happy to discuss how things could be done differently in various situations where the needs are different (memory, cpu, load, cache, etc), or data is known (common queries, restricted data), or results do not need to hold 100% accuracy (rough estimates or approximations) in favor of speed.
 
 ## Part 3
+For the API interface to the linguistic chain program, I wrote a flask API server.  I have never written a flask server before.  The API is set at the path 'linguistic_chains' and expects a parameter `word` to be supplied, resulting in a 400 if not supplied.  Any other parameters are ignored.  The API returns JSON for the given word for the longest chains found.  The dictionary used by the API is the standard unix dictionary found at '/usr/share/dict/words'.  Example usage and results can be found below.
 
+I am currently not doing anything to defend against security attacks, and I do not know the flask framework well enough to argue the security; though I would love to talk about other frameworks and security in general!  As far as DDOS goes, there isn't anything set up in front of my server and I am not recording load.  The only protection I have is that there isn't much work done by the server for an incoming request.  In worst case, the attacker will force the server to cache (memoize) the results and the server's work will reduce over time.  
 
-<!-- ### Step 3
-For this part of the challenge, I wrote a Flask API.  I have never written an API in Flask before.  A call to `/linguistic_chains` expects a parameter `word`.  If this is missing, an HTTP status of 400 is returned.  The API will return JSON for the word given if any chains are found.  The dictionary used by the API is the words list found at `/usr/share/dict/words` on unix machines.
-
-Example url: `http://localhost:5000/linguistic_chains?word=learning`
-
-Example output
+`http://localhost:5000/linguistic_chains?word=gnostology`
 ``` json
-{"learning": [["learning", "earning", "earing"]]}
-``` -->
+{
+  "gnostology": [
+    [
+      "gnostology", 
+      "nostology", 
+      "nosology", 
+      "noology", 
+      "oology", 
+      "ology", 
+      "logy", 
+      "loy", 
+      "ly", 
+      "y"
+    ], 
+    [
+      "gnostology", 
+      "nostology", 
+      "nosology", 
+      "noology", 
+      "oology", 
+      "ology", 
+      "logy", 
+      "loy", 
+      "ly", 
+      "l"
+    ],
+    ...
+    [
+      "gnostology", 
+      "nostology", 
+      "nosology", 
+      "noology", 
+      "oology", 
+      "ology", 
+      "logy", 
+      "log", 
+      "lo", 
+      "o"
+    ], 
+    [
+      "gnostology", 
+      "nostology", 
+      "nosology", 
+      "noology", 
+      "oology", 
+      "ology", 
+      "logy", 
+      "log", 
+      "lo", 
+      "l"
+    ]
+  ]
+}
+```
