@@ -1,4 +1,6 @@
 # LearnSprout coding challenge
+The LearnSprout coding challenge consists of 3 parts.  Part 1 is 'show and tell'.  I describe one of my most recent projects, LearnTo.  In part 2, I describe the linguistic chain coding challenge and command line interface.  For part 3, I describe the API interface to the linguistic chain program.  I decided to put the API into its own part for readability and isolation.
+
 ## Part 1
 Last summer my friend Vishnu, a medical student at UCSD, decided to learn programming like many others his age. He wanted to learn programming to broaden his horizons and bring his own ideas to life through apps and websites. Excited by his new intellectual venture, Vishnu tried using a variety of different resources - CodeAcademy, One Month Rails, Khan Academy, and many others. However, none of them worked. Time and again, he would get stuck, and frustrated as he tried to parse through challenging new material without any help from others. Unlike how he learned throughout his life, this time he didn't have anyone to answer his questions, point him to the right resources, and check his understanding. In seeing this, I realized that Vishnu is representative of a large group of people who don't learn best on their own and are being left behind by online education. He, like so many of us, thrives when he has someone there to help him understand the beauty and the intuition behind what it is he is learning. Learning alone, with no one there to communicate with, is unnatural, difficult, and ineffective for him.
 
@@ -12,6 +14,7 @@ If you're looking for something more technical, check out my security final proj
 The major piece of this part lives in the LinguisticChains class of the linguistic.py file.  This class takes in a collection (set, list, etc) of words and allows for data about the set to be retreived. For steps 1 and 2, I have included a script for running from the command line.  The usage is below.
 
 ``` console
+$ ./learn_sprout.py --help
 Usage: learn_sprout.py [options]
 
 Options:
@@ -34,12 +37,18 @@ I initially approached this problem, and sorting jumped to mind.  If I knew that
 The LinguisticChains class accepts a set of words, a point of concern from a memory standpoint.  In order to find the longest chain, the class will iterate over all words and keep record of the chain length as it goes (additionally storing the longest chains seen).  Each word is looked at, broken into valid subwords, added to the chains of each subword, and returned.  I initially implemented my own memoization dictionary, but decided to use the python memoization decorator for my final submission.
 
 ### Runtime
-There are several pieces of the program to look at when considering runtime performance.  First, reading in the file has a O(n) runtime and memory cost.  Iterating over all of the words also has an O(n) runtime.  Recursing on each word has a k! runtime, where k is the length of the word.  This results in a O(n*k!) runtime.  However, memoizing the result of each computation means that we hit O(n) in worst case: All subwords being checked are valid and their result is only computer once.
+There are several pieces of the program to look at when considering runtime performance.  First, reading in the file has a O(n) runtime and memory cost.  Iterating over all of the words also has an O(n) runtime.  Recursing on each word has a k! runtime, where k is the length of the word.  This results in a O(n*k!) runtime.  However, memoizing the result of each computation means that we hit O(n) in worst case: All subwords being checked are valid and their result is only computed once.
 
-The runtime for computing a single word still involves reading in the set of words.  This is a fixed cost though, and only happens once per instantiation of the class.  At that point, the worst case runtime is then O(k!) where k is the number of letters in the word.  This is worst case, assuming every subword of every subword and the word iteself is a valid word.
+The runtime for computing a single word still involves reading in the set of words.  This is a fixed cost though, and only happens once per instantiation of the class.  At that point, the worst case runtime is then O(k!) where k is the number of letters in the word.  This is worst case, assuming every subword of every subword and the word iteself is a valid word.  The more general case will result in a runtime of O(c*l) where l is the length of the longest chain and c is the number of chains of that lenght.  Consider 'gnostology' and the unix dictionary.  This results in 12 chains of length 10, seen above.
 
 ### Assumptions and optimizations
+For this challenge, I made several assumptions.  First, that the entire dictionary could be loaded into memory (tested with unix dictionary with 235,886 words).  This is a reasonable assumption considering the unix dictionary, when loaded into a python set, is 8.0 Megabytes.  
 
+There are various optimizations that I did not make.  This includes using information about the length of seen chains or other heuristics for decision making.  For example, if you have already seen a chain of length 7, there would be no need to check a word of length 5.  While this is an easy change, I decided to leave it out for readablity.
+
+While I made these assumptions and optimizations (of lack of), I would be happy to discuss how things could be done differently in various situations where the needs are different (memory, cpu, load, cache, etc), or data is known (common queries, restricted data), or results do not need to hold 100% accuracy (rough estimates or approximations) in favor of speed.
+
+## Part 3
 
 
 <!-- ### Step 3

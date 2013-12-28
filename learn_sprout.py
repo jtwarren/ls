@@ -4,6 +4,8 @@ from optparse import OptionParser
 
 from linguistic import LinguisticChains
 
+import sys
+
 """Get all words from a file."""
 def words_from_file(filename):
   return set(line.strip() for line in open(filename))
@@ -19,15 +21,15 @@ if __name__=="__main__":
   
   (options, args) = parser.parse_args()
 
-  if not options.dict_file:
+  dictionary = options.dict_file
+  word = options.starting_word if options.starting_word else None
+
+  if not dictionary:
     parser.error('Please supply a dictionary file.')
 
   # Set containing all words from file
-  words = words_from_file(options.dict_file)
+  words = words_from_file(dictionary)
 
   lc = LinguisticChains(words)
 
-  # Redundant but for clarity
-  starting_word = options.starting_word if options.starting_word else None
-
-  print_chains(lc.longest_chains(starting_word))
+  print_chains(lc.longest_chains(word))

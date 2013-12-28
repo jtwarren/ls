@@ -59,7 +59,8 @@ class LinguisticChains:
 
         # Add to longest chain information
         elif length == longest:
-          long_chains.append(chain) 
+          long_chains.append(chain)
+
       return long_chains
 
     # Go through each word
