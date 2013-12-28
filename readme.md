@@ -9,20 +9,17 @@ I am particularly proud of working on LearnTo (http://www.learnto.com/). I began
 If you're looking for something more technical, check out my security final project on Android Progressive Authentication: http://css.csail.mit.edu/6.858/2013/projects/jtwarren-vkgdaddy-vedha-vvelaga.pdf.
 
 ## Part 2
-### Step 1 and 2
-```
+The major piece of this part lives in the LinguisticChains class of the linguistic.py file.  This class takes in a collection (set, list, etc) of words and allows for data about the set to be retreived. For steps 1 and 2, I have included a script for running from the command line.  The usage is below.
+
+``` console
 Usage: learn_sprout.py [options]
 
 Options:
   -h, --help            show this help message and exit
   -d FILE, --dict=FILE  Dictionary file containing valid words.
   -w WORD, --word=WORD  Word to derive linguistic chain from.
-```
 
-Example command: `./learn_sprout.py --dict=words  --word=gnostology`
-
-Example output:
-``` console
+$ ./learn_sprout.py --dict=words  --word=gnostology
 gnostology => nostology => nosology => noology => oology => ology => logy => loy => ly => y
 gnostology => nostology => nosology => noology => oology => ology => logy => loy => ly => l
 ...
@@ -30,7 +27,22 @@ gnostology => nostology => nosology => noology => oology => ology => logy => log
 gnostology => nostology => nosology => noology => oology => ology => logy => log => lo => l
 ```
 
-### Step 3
+### Approach
+I initially approached this problem, and sorting jumped to mind.  If I knew that I have already processed smaller words than the given word, then I could just built the chain with a simple check of the subwords (each word made by removing a single letter).  This approached seemed okay, but I was worried about the sorting runtime.  I then thought, I could just recurse on the subwords (only valid subwords, of course), and built a chain for each word.  While a naieve attempt at this would prove catestrophic runtime, a simple memoized version runs pretty well.
+
+### Description
+The LinguisticChains class accepts a set of words, a point of concern from a memory standpoint.  In order to find the longest chain, the class will iterate over all words and keep record of the chain length as it goes (additionally storing the longest chains seen).  Each word is looked at, broken into valid subwords, added to the chains of each subword, and returned.  I initially implemented my own memoization dictionary, but decided to use the python memoization decorator for my final submission.
+
+### Runtime
+There are several pieces of the program to look at when considering runtime performance.  First, reading in the file has a O(n) runtime and memory cost.  Iterating over all of the words also has an O(n) runtime.  Recursing on each word has a k! runtime, where k is the length of the word.  This results in a O(n*k!) runtime.  However, memoizing the result of each computation means that we hit O(n) in worst case: All subwords being checked are valid and their result is only computer once.
+
+The runtime for computing a single word still involves reading in the set of words.  This is a fixed cost though, and only happens once per instantiation of the class.  At that point, the worst case runtime is then O(k!) where k is the number of letters in the word.  This is worst case, assuming every subword of every subword and the word iteself is a valid word.
+
+### Assumptions and optimizations
+
+
+
+<!-- ### Step 3
 For this part of the challenge, I wrote a Flask API.  I have never written an API in Flask before.  A call to `/linguistic_chains` expects a parameter `word`.  If this is missing, an HTTP status of 400 is returned.  The API will return JSON for the word given if any chains are found.  The dictionary used by the API is the words list found at `/usr/share/dict/words` on unix machines.
 
 Example url: `http://localhost:5000/linguistic_chains?word=learning`
@@ -38,4 +50,4 @@ Example url: `http://localhost:5000/linguistic_chains?word=learning`
 Example output
 ``` json
 {"learning": [["learning", "earning", "earing"]]}
-```
+``` -->
