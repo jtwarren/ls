@@ -18,4 +18,4 @@ Options:
 ```
 
 ### Step 3
-For this, I wrote a flask API.  I have never written an API or web server using flask before (all my web dev is in RoR).  
+For this part of the challenge, I wrote a Flask API.  I have never written an API in Flask before.  A call to `/linguistic_chains` expects a parameter `word`.  If this is missing, an HTTP status of 400 is returned.  The API will return JSON for the word given if any chains are found.  The dictionary used by the API is the words list found at `/usr/share/dict/words` on unix machines.
