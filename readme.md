@@ -6,6 +6,8 @@ LearnTo's solution to the problem is simple and elegant: we connect people who a
 
 I am particularly proud of working on LearnTo (http://www.learnto.com/). I began working on this project with my friend, Dhruv. We came into this past semester with an idea (and a domain name :P), discussed many approaches, and built a website in around 4 days. We launched our website in November and within just one month we had over 180 user sign ups, 100 lesson requests, and 70 lessons happen or scheduled to happen.  Additionally, we have partnered with 4 coffee shops in the Cambridge area and are happy to being working with them.  We were accepted into MIT's 100k Accelerate program and we are going for another huge push over January.
 
+If you're looking for something more technical, check out my security final project on Android Progressive Authentication: http://css.csail.mit.edu/6.858/2013/projects/jtwarren-vkgdaddy-vedha-vvelaga.pdf.
+
 ## Part 2
 ### Step 1 and 2
 ```
@@ -17,20 +19,22 @@ Options:
   -w WORD, --word=WORD  Word to derive linguistic chain from.
 ```
 
+Example command: `learn_sprout.py -f words`
+Example output:
+``` console
+abranchiate => branchiate => branchiae => branchia => branchi => branch => ranch => rach => ach => ah => h
+abranchiate => branchiate => branchiae => branchia => branchi => branch => ranch => rach => ach => ah => a
+...
+abranchiate => branchiate => branchiae => branchia => branchi => branch => brach => bach => bac => ba => a
+abranchiate => branchiate => branchiae => branchia => branchi => branch => brach => bach => bac => ba => b
+```
+
 ### Step 3
 For this part of the challenge, I wrote a Flask API.  I have never written an API in Flask before.  A call to `/linguistic_chains` expects a parameter `word`.  If this is missing, an HTTP status of 400 is returned.  The API will return JSON for the word given if any chains are found.  The dictionary used by the API is the words list found at `/usr/share/dict/words` on unix machines.
 
-Example url: http://localhost:5000/linguistic_chains?word=learning
+Example url: `http://localhost:5000/linguistic_chains?word=learning`
 
 Example output
 ``` json
-{
-  "learning": [
-    [
-      "learning", 
-      "earning", 
-      "earing"
-    ]
-  ]
-}
+{"learning": [["learning", "earning", "earing"]]}
 ```
