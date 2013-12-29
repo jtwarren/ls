@@ -1,7 +1,14 @@
 from memo import memoized
 
-"""Get the subwords for a given `word`."""
 def subwords_from_word(word):
+  """Get the subwords for a given `word`.
+
+  Args:
+    word (str): The word for which subwords are desired.
+
+  Returns:
+    list: Subwords of the given word.  
+  """
   return [word[:i] + word[i+1:] for i in xrange(len(word))]
 
 class LinguisticChains:
@@ -11,7 +18,17 @@ class LinguisticChains:
 
   @memoized
   def chains(self, word):
+    """Get chains for a given word.
 
+    A chain is made by removing a single letter from a word, such that the new
+    word is also a valid word.
+
+    Args:
+      word (str): The word for which chains are desired.
+
+    Returns:
+      list: Chains for the given word.  
+  """
     # Get all valid subwords
     subwords = [subword for subword in subwords_from_word(word) if subword in self.words]
 
@@ -35,8 +52,20 @@ class LinguisticChains:
     # Return all chains of `word`
     return chains
 
-  """Get the longest chains for a given `word`.  If no word is supplied, get the longest chain from `words`"""
   def longest_chains(self, word=None):
+    """Get the longest chains for a given word if supplied, otherwise the
+    longest chain from the supplied words to the class will be given.
+
+    A chain is made by removing a single letter from a word, such that the new
+    word is also a valid word.
+
+    Args:
+      word (str, optional): The word for which chains are desired.
+
+    Returns:
+      list: Longest chains for the given word if supplied.  Otherwise, the
+      longest chains for the supplied words to the class will be returned.
+    """
     words = [word] if word else self.words
 
     # Keep track of longest as going through words
