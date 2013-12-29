@@ -13,10 +13,6 @@ words = set(line.strip() for line in open('words'))
 
 lc = LinguisticChains(words)
 
-# Not sure how to do this, want lc to persist while server runs.
-# Effect is that it caches results (longest_chains is memoized).
-lc = LinguisticChains([])
-
 @app.route('/linguistic_chains')
 def linguistic_chains():
 
@@ -29,6 +25,8 @@ def linguistic_chains():
 
   # Get chain for starting word
   chains = lc.longest_chains(starting_word)
+
+  print chains
 
   # Return json of chains
   return jsonify({starting_word: chains})
