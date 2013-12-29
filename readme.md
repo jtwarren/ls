@@ -52,7 +52,7 @@ For the API interface to the linguistic chain program, I wrote a flask API serve
 
 I am currently not doing anything to defend against security attacks, and I do not know the flask framework well enough to argue the security; though I would love to talk about other frameworks and security in general!  As far as DDOS goes, there isn't anything set up in front of my server and I am not recording load.  The only protection I have is that there isn't much work done by the server for an incoming request.  In worst case, the attacker will force the server to cache (memoize) the results and the server's work will reduce over time.  
 
-`http://localhost:5000/linguistic_chains?word=gnostology`
+`http://learnsprout.herokuapp.com/linguistic_chains?word=gnostology`
 ``` json
 {
   "gnostology": [

@@ -23,9 +23,6 @@ if __name__=="__main__":
   if not dictionary:
     parser.error('Please supply a dictionary file.')
 
-  # Set containing all words from file
-  words = words_from_file(dictionary)
-
-  lc = LinguisticChains(words)
+  lc = LinguisticChains(words_from_file(dictionary))
 
   print_chains(lc.longest_chains(word))

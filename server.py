@@ -24,19 +24,7 @@ def linguistic_chains():
       abort(400)
 
   # Get chain for starting word
-  chains = lc.longest_chains(starting_word)
-
-  print chains
+  chains = lc.chain_from_word(starting_word)
 
   # Return json of chains
   return jsonify({starting_word: chains})
-
-# if __name__ == '__main__':
-#   # For server, use words dictionary
-#   words = set(line.strip() for line in open('words'))
-
-#   # Set LinguisticChains to use words
-#   lc = LinguisticChains(words)
-
-#   # Run server
-#   app.run(debug = True)
